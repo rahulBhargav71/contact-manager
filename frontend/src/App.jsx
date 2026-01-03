@@ -7,7 +7,8 @@ export default function App() {
 
   const fetchContacts = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/contacts");
+      const res = await fetch("/api/contacts");
+      if (!res.ok) throw new Error("Failed to fetch");
       const data = await res.json();
       setContacts(data);
     } catch (error) {
