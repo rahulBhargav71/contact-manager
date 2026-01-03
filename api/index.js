@@ -1,14 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
-import cors from "cors";
-
-// Import your Contact model
-import Contact from "../../models/Contact.js"; // adjust path depending on folder structure
+import Contact from "../../models/Contact.js"; // adjust path if needed
 
 const app = express();
-
-// Middleware
-app.use(cors());
 app.use(express.json());
 
 // Connect to MongoDB
@@ -17,15 +11,12 @@ mongoose.connect(process.env.MONGO_URI, {
   useUnifiedTopology: true,
 });
 
-// Routes
-
 // GET /api/contacts
 app.get("/", async (req, res) => {
   try {
     const contacts = await Contact.find().sort({ createdAt: -1 });
     res.status(200).json(contacts);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -40,7 +31,6 @@ app.post("/", async (req, res) => {
     const contact = await Contact.create({ name, email, phone, message });
     res.status(201).json(contact);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -51,7 +41,6 @@ app.delete("/:id", async (req, res) => {
     await Contact.findByIdAndDelete(req.params.id);
     res.status(200).json({ message: "Deleted successfully" });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: error.message });
   }
 });
